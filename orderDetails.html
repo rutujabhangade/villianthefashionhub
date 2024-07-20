@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        background-color: #f9f9f9;
+        height: 80vh;
+      }
+
+      .header {
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .sub_header {
+        text-align: center;
+      }
+
+      .order-details {
+        margin-bottom: 20px;
+      }
+
+      .order-details th,
+      .order-details td {
+        padding: 10px;
+        border: 1px solid #ddd;
+      }
+      .name {
+        width: 400px;
+      }
+
+      .total {
+        font-size: 20px;
+        font-weight: bold;
+        text-align: right;
+      }
+      .sign {
+        margin-top: 50px;
+        text-align: right;
+      }
+      .customerName {
+        font-size: larger;
+        font-weight: bold;
+      }
+
+      @media print {
+        body {
+          margin: 0;
+          font-size: 12pt;
+        }
+
+        .container {
+          border: none;
+          box-shadow: none;
+          background-color: white;
+          height: 80vh;
+        }
+
+        .header {
+          font-size: 18pt;
+        }
+
+        .order-details th,
+        .order-details td {
+          padding: 8px;
+        }
+
+        .total {
+            margin-right: 7rem;
+          font-size: 16pt;
+        }
+        .name {
+        width: 400px;
+        }
+        .sign{
+            margin-right: 7rem;
+
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">VILLAIN</div>
+      <h3 class="sub_header">The Fastion Hub</h3>
+      <div id="customerName"></div>
+      <table class="order-details">
+        <thead>
+          <tr>
+            <th class="name">Item</th>
+            <th>Quantity</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody id="orderTableBody"></tbody>
+      </table>
+      <div class="total" id="totalAmount"></div>
+      <p class="sign">signature</p>
+    </div>
+
+    <script>
+      function getQueryParams() {
+        const params = new URLSearchParams(window.location.search);
+        return Array.from(params.entries()).reduce((acc, [key, value]) => {
+          acc[key] = value;
+          return acc;
+        }, {});
+      }
+
+      function displayOrderDetails() {
+        const params = getQueryParams();
+        document.getElementById("customerName").innerText =
+          "Customer Name: " + (params.customerName || "");
+
+        const orderTableBody = document.getElementById("orderTableBody");
+        let total = 0;
+
+        for (let i = 1; i <= 5; i++) {
+          // Assuming a maximum of 5 items
+          if (params["item" + i]) {
+            const item = params["item" + i];
+            const quantity = params["quantity" + i];
+            const price = params["price" + i];
+            total += quantity * price;
+
+            const row = document.createElement("tr");
+            row.innerHTML = `<td>${item}</td><td>${quantity}</td><td>${price}</td>`;
+            orderTableBody.appendChild(row);
+          }
+        }
+
+        document.getElementById("totalAmount").innerText = "Total: " + total;
+      }
+
+      window.onload = displayOrderDetails;
+    </script>
+  </body>
+</html>

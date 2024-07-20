@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            margin: 200px;
+            background-color: rgb(13, 13, 13);
+            background-image: url(./villain\ logo\ \ copy.png);
+            background-repeat: no-repeat;
+            background-size: contain;
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            background-color: hwb(115.75deg 61.47% 0%);
+            display: flex;
+            justify-content: space-evenly;
+        }
+
+        li {
+            display: inline;
+        }
+
+        li a {
+            display: block;
+            color: rgb(0, 0, 0);
+            text-align: center;
+            padding: 14px 66px;
+            text-decoration: none;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin: 0 auto;
+        }
+
+        .container div {
+            padding: 10px;
+        }
+
+        .header {
+            font-weight: bold;
+            text-align: center;
+            background-color: hwb(107 62% 1%);
+        }
+
+        .dropdown,
+        .input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            background-color: white;
+        }
+
+        .footer {
+            grid-column: span 3;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border: 1px solid #a88585;
+            background-color: hwb(115.75deg 61.47% 0%);
+        }
+
+        .footer input {
+            padding: 8px;
+            width: 100px;
+            box-sizing: border-box;
+            text-align: right;
+        }
+
+        .main {
+            background-color: rgba(255, 82, 116, 0.608);
+            opacity: 80%;
+        }
+
+        .placeholder {
+            padding-right: 20px;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body>
+    <form id="orderForm">
+        <br />
+        <input type="text" name="customerName" placeholder="Customer name">
+        <br />
+        <br />
+        <div class="main">
+            <ul>
+                <li><a href="#news">Item</a></li>
+                <li><a href="#contact">Quantity</a></li>
+                <li><a href="#about">Price</a></li>
+            </ul>
+
+            <div class="container" id="itemContainer">
+                <!-- Initial Row -->
+                <div>
+                    <select name="item1" class="dropdown">
+                        <option value="">Select</option>
+                        <option value="T-shirt">T-shirt</option>
+                        <option value="Jeans">Jeans</option>
+                        <option value="Kurti">Kurti</option>
+                        <option value="Top">Top</option>
+                        <option value="Shirt">Shirt</option>
+                        <option value="Shoes">Shoes</option>
+                        <option value="Slipper">Slipper</option>
+                    </select>
+                </div>
+                <div>
+                    <input type="number" name="quantity1" class="input quantity" placeholder="Quantity">
+                </div>
+                <div>
+                    <input type="number" name="price1" class="input price" placeholder="Price">
+                </div>
+            </div>
+
+            <div class="footer">
+                <button type="button" onclick="calculateTotal()">Total</button>
+                <input type="text" id="total" placeholder="Total" readonly>
+                <button type="button" onclick="addItem()">Add Item</button>
+                <button type="submit">Submit</button>
+            </div>
+        </div>
+    </form>
+
+    <script>
+        let itemCount = 1;
+
+        function calculateTotal() {
+            const quantities = document.querySelectorAll('.quantity');
+            const prices = document.querySelectorAll('.price');
+            let total = 0;
+
+            for (let i = 0; i < quantities.length; i++) {
+                const quantity = quantities[i].value;
+                const price = prices[i].value;
+                if (quantity && price) {
+                    total += quantity * price;
+                }
+            }
+
+            document.getElementById('total').value = total;
+        }
+
+        function addItem() {
+            itemCount++;
+            const container = document.getElementById('itemContainer');
+
+            const itemDiv = document.createElement('div');
+            itemDiv.innerHTML = `<select name="item${itemCount}" class="dropdown">
+                    <option value="">Select</option>
+                    <option value="T-shirt">T-shirt</option>
+                    <option value="Jeans">Jeans</option>
+                    <option value="Kurti">Kurti</option>
+                    <option value="Top">Top</option>
+                    <option value="Shirt">Shirt</option>
+                    <option value="Shoes">Shoes</option>
+                    <option value="Slipper">Slipper</option>
+                </select>`;
+            container.appendChild(itemDiv);
+
+            const quantityDiv = document.createElement('div');
+            quantityDiv.innerHTML = `<input type="number" name="quantity${itemCount}" class="input quantity" placeholder="Quantity">`;
+            container.appendChild(quantityDiv);
+
+            const priceDiv = document.createElement('div');
+            priceDiv.innerHTML = `<input type="number" name="price${itemCount}" class="input price" placeholder="Price">`;
+            container.appendChild(priceDiv);
+        }
+
+        document.getElementById('orderForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const params = new URLSearchParams();
+            for (const pair of formData) {
+                params.append(pair[0], pair[1]);
+            }
+            window.location.href = 'orderDetails.html?' + params.toString();
+        });
+    </script>
+</body>
+</html>
